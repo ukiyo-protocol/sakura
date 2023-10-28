@@ -1,0 +1,31 @@
+name: Dependabot
+
+on:
+  # Workflow schedule triggered to weekly
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.x # Ruby version 2
+
+      - name: Install Dependabot
+        run: gem install dependabot-bundler dependabot-npm dependabot-python dependabot-gomod
+
+      - name: Run Dependabot
+        run: dependabot --version
+        # No custom commands
+
+      - name: Create Pull Requests
+        run: dependabot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
